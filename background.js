@@ -44,6 +44,15 @@ function ffGetHostname(url) {
   }
 }
 
+function ffGetURIPath(url) {
+  try {
+    return new URL(url).pathname;
+  } catch (e) {
+    console.error("Invalid URL:", url);
+    return "";
+  }
+}
+
 function ffHighlightText(text, words) {
   words
   .map(function(word) { return ffRegexpExactHl(word); })
@@ -118,7 +127,7 @@ function ffRegexpFuzzy(word) {
 
 function ffPrepareTab(tab, words) {
   var content = tab.url + "#" + tab.windowId + "." + tab.id;
-  var desc = ffHighlightText(tab.title, words) + " <url>" +  ffHighlightText(ffGetHostname(tab.url), words) + "</url>";
+  var desc = ffHighlightText(tab.title, words) + " <url>" +  ffHighlightText(ffGetHostname(tab.url), words) + "</url>" + "<dim>" + ffHighlightText(ffGetURIPath(tab.url), words) + "</dim>";
 
   if(FF_DEBUGGING) {
     desc = "score:" + tab.score + " - " + desc;
